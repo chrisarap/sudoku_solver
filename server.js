@@ -10,6 +10,9 @@ const runner            = require('./test-runner');
 
 const app = express();
 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/library');
+
 app.use('/public', express.static(process.cwd() + '/public'));
 app.use(cors({origin: '*'})); //For FCC testing purposes only
 
@@ -27,7 +30,7 @@ fccTestingRoutes(app);
 
 // User routes
 apiRoutes(app);
-    
+
 //404 Not Found Middleware
 app.use(function(req, res, next) {
   res.status(404)
