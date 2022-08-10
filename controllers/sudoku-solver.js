@@ -27,6 +27,7 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
+
     let letters = 'ABCDEFGHI';
     let arr = {};
     let count = 0;
@@ -40,6 +41,7 @@ class SudokuSolver {
       }
     }
 
+
     // extract rows and columns
     let myRow = this.createRow(arr);
     let myColumns = this.createColumn(arr);
@@ -51,7 +53,7 @@ class SudokuSolver {
     console.log(arr);
 
     // cleanSector
-    cleanSector(arr);
+    this.cleanSector(arr);
 
   } // end solve method
 
@@ -120,21 +122,44 @@ class SudokuSolver {
   } // end cleanRows
 
   cleanSector(arr) {
-    let sectors = {
-      1: ['ABC', '123'],
-      2: ['ABC', '456'],
-      3: ['ABC', '789'],
+    let sectors = [
+      ['A','B','C'],
+      ['D','E','F'],
+      ['G','H','I']
+    ];
 
-      4: ['DEF', '123'],
-      5: ['DEF', '456'],
-      6: ['DEF', '789'],
-
-      7: ['GHI', '123'],
-      8: ['GHI', '456'],
-      9: ['GHI', '789']
-    };
+    console.log(this.repeatSector(arr, sectors));
   }
 
+  repeatSector(arr, sectors) {
+    let myArr = [];
+    let aux = [];
+    let count = 0;
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 1; j < 10; j++) {
+        for (let k = 0; k < 3; k++) {
+          let myStr = `${sectors[i][k] + j}`;
+
+          if (typeof arr[myStr] == 'number') {
+            aux.push(arr[myStr]);
+          }
+
+          if (j % 3 == 0 && count != 2) {
+            count++;
+          } else if (j % 3 == 0 && count == 2) {
+            myArr.push([j, aux]);
+            aux = [];
+            count = 0;
+          }
+        }
+
+      }
+    }
+
+    console.log(myArr);
+
+  } // end repeatSector method
 
 }
 
