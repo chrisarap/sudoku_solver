@@ -15,7 +15,31 @@ class SudokuSolver {
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
+    let iValues = {
+      A: 0,
+      B: 9,
+      C: 18,
+      D: 27,
+      E: 36,
+      F: 45,
+      G: 54,
+      H: 63,
+      I: 72,
+    };
 
+    let answer = [];
+
+    for (var i = iValues[row]; i < iValues[row] + 9; i++) {
+      if (puzzleString[i] != '.') {
+        answer.push(puzzleString[i]);
+      }
+    }
+
+    if(answer.indexOf(value) >= 0) {
+      return 'row';
+    } else {
+      return false;
+    }
   }
 
   checkColPlacement(puzzleString, row, column, value) {
