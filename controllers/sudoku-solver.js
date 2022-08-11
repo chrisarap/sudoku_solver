@@ -10,8 +10,8 @@ class SudokuSolver {
       if(rgx.test(puzzleString)){
         return {error: 'Invalid characters in puzzle'};
       }
+      return this.solve(puzzleString);
     }
-    this.solve(puzzleString);
   }
 
   checkRowPlacement(puzzleString, row, column, value) {
@@ -55,7 +55,7 @@ class SudokuSolver {
       arr = this.cleanSector(arr);
     }
 
-    console.log(arr);
+    // console.log(arr);
 
     // convert to string
     let answer = [];
@@ -63,7 +63,14 @@ class SudokuSolver {
       answer.push(arr[myStr]);
     }
 
-    return answer.join('');
+    let checkSum = answer.slice().reduce((sum, x) => sum + x);
+
+    if (checkSum == 405) {
+      return {solution: answer.join('')};
+    } else {
+      return {error: 'Puzzle cannot be solved'};
+    }
+
 
   } // end solve method
 
