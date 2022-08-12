@@ -43,11 +43,108 @@ class SudokuSolver {
   }
 
   checkColPlacement(puzzleString, row, column, value) {
+    let letters = 'ABCDEFGHI';
+    let  answer = [];
+    let iValues = {
+      A: 0,
+      B: 9,
+      C: 18,
+      D: 27,
+      E: 36,
+      F: 45,
+      G: 54,
+      H: 63,
+      I: 72,
+    };
 
+    for (var i = 0; i < letters.length; i++) {
+      let num = puzzleString[iValues[letters[i]] + Number(column) - 1];
+
+      if (num != '.') {
+        answer.push(num);
+      }
+    }
+
+    if (answer.indexOf(value) >= 0) {
+      return 'column';
+    } else {
+      return false;
+    }
   }
 
   checkRegionPlacement(puzzleString, row, column, value) {
+    let letters = 'ABCDEFGHI';
+    let arr = {};
+    let count = 0;
 
+    // create sudoku
+    for (var i = 0; i < 9; i++) {
+      for (var j = 1; j <= 9; j++) {
+        let myKey = `${letters[i] + j}`;
+
+        Object.assign(arr, {[myKey]: Number(puzzleString[count])});
+        count++;
+      }
+    }
+
+    let secondGroup = [[], [], []];
+
+    // divide group in 3
+    for (let key in arr) {
+      if(Number(key[1]) <= 3) {
+        secondGroup[0].push([key, arr[key]]);
+      } else if(Number(key[1]) <= 6) {
+        secondGroup[1].push([key, arr[key]]);
+      } else if(Number(key[1]) <= 9) {
+        secondGroup[2].push([key, arr[key]]);
+      }
+    }
+
+    // create 9 groups
+    let thirdGroup = {};
+    let aux = {};
+    count = 0;
+    let auxNum;
+    let auxLetter;
+    let countGroup = 0;
+
+    for (let thirdKey in secondGroup) {
+      for (let fourthKey in secondGroup[thirdKey]) {
+
+        auxLetter = secondGroup[thirdKey][fourthKey][0];
+        auxNum = secondGroup[thirdKey][fourthKey][1];
+
+        Object.assign(aux, {[auxLetter]: auxNum});
+
+        count++
+        if (count == 9) {
+
+          Object.assign(thirdGroup, {[countGroup]: aux});
+          aux= {};
+          count = 0;
+          countGroup++;
+        }
+      }
+    }
+
+    // clean region object
+    let myAns = [];
+    for (let groupKey in thirdGroup) {
+       if(thirdGroup[groupKey].hasOwnProperty(row + column)){
+
+         Object.entries(thirdGroup[groupKey]).map(x => {
+            if(x[1] > 0) {
+              myAns.push(x[1]);
+            }
+        });
+       }
+    }
+
+    if (myAns.indexOf(Number(value)) >= 0) {
+      return 'region';
+    } else {
+      return false;
+    }
   }
 
   solve(puzzleString) {
