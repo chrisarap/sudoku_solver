@@ -82,7 +82,7 @@ module.exports = function (app) {
   app.route('/api/solve')
     .post((req, res) => {
       let myObj = {};
-
+      
       solver.validate(req.body.puzzle) ? myObj = solver.validate(req.body.puzzle) : {};
       return res.send(myObj);
     });
