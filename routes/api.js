@@ -15,31 +15,31 @@ module.exports = function (app) {
 
       if (puzzle == undefined || value == undefined || coordinate == undefined) {
         myObj = { error: 'Required field(s) missing' };
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
 
       if (puzzle.length != 81) {
         myObj = { error: 'Expected puzzle to be 81 characters long' };
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
 
       if ((/[^0-9\.]/g).test(puzzle)) {
         myObj = { error: 'Invalid characters in puzzle' };
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
 
       if (['1','2','3','4','5','6','7','8','9'].indexOf(value) < 0) {
         myObj = { error: 'Invalid value' };
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
 
       if ( coordinate.length != 2 || ['A','B','C','D','E','F','G','H','I'].indexOf(coordinate[0]) < 0 || ['1','2','3','4','5','6','7','8','9'].indexOf(coordinate[1]) < 0) {
         myObj = { error: 'Invalid coordinate' };
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
 
@@ -62,7 +62,7 @@ module.exports = function (app) {
         puzzle[coordinateExist] = '.';
         puzzle = puzzle.join('');
       }
-      console.log(typeof coordinateExist, puzzle);
+      // console.log(typeof coordinateExist, puzzle);
 
       let validRow    = solver.checkRowPlacement    (puzzle, coordinate[0], coordinate[1], value);
       let validCol    = solver.checkColPlacement    (puzzle, coordinate[0], coordinate[1], value)
@@ -70,11 +70,11 @@ module.exports = function (app) {
 
       if (!validRow && !validCol && !validRegion) {
         myObj = {valid: true};
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       } else {
         myObj = {valid: false, conflict: [validRow, validCol, validRegion].filter(x => x)};
-        console.log(req.body, myObj);
+        // console.log(req.body, myObj);
         return res.send(myObj);
       }
     });
@@ -82,7 +82,7 @@ module.exports = function (app) {
   app.route('/api/solve')
     .post((req, res) => {
       let myObj = {};
-      
+
       solver.validate(req.body.puzzle) ? myObj = solver.validate(req.body.puzzle) : {};
       return res.send(myObj);
     });
